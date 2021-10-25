@@ -9,13 +9,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Program.fs" />
+        <Compile Include="Monad.fs" />
+        <Compile Include="ReadJson.fs" />
+        <Compile Include="Main.fs" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Include=".dockerignore" />
       <Content Include="config.json" />
       <Content Include="Dockerfile" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FSharp.Data" Version="4.2.4" />
     </ItemGroup>
 
 </Project>
