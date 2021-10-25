@@ -9,12 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Config.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Include=".dockerignore" />
+      <Content Include="config.json" />
       <Content Include="Dockerfile" />
     </ItemGroup>
 
