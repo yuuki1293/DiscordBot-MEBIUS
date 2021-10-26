@@ -30,6 +30,8 @@
 
     <ItemGroup>
       <Folder Include="bin\Debug\net5.0" />
+      <Compile Include="DataBase\MySQL.fs" />
+      <Content Include="docker-compose.yaml" />
     </ItemGroup>
 
 </Project>

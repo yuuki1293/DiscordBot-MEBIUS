@@ -1,0 +1,39 @@
+﻿version: "3"
+volumes: 
+  mysql-data:
+
+networks:
+  mebius-mysql:
+    external: false
+
+services:
+  phpmyadmin:
+    image: phpmyadmin
+    environment:
+      - TZ=Asia/Tokyo
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=anypassw0rd
+    networks:
+      - mebius-mysql
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+  db:
+    image: mysql:latest
+    environment:
+      - TZ=Asia/Tokyo
+      - MYSQL_ROOT_PASSWORD=anypassw0rd
+    command: [
+        '--wait_timeout=86400',
+        '--character-set-server=utf8',
+    ]
+    networks:
+      - mebius-mysql
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
