@@ -28,4 +28,7 @@ type SendHelloCommand() =
 
     
     [<Command("hoge"); Description("Join the channel")>]
-    member public this.Join(ctx: CommandContext) = async { ctx.RespondAsync "" |> ignore }
+    member public this.hoge(ctx: CommandContext) =
+        printf "コマンドを受信"
+        async { this.RespondAsync ctx "hogeを受信" |> ignore }
+        |> Async.StartAsTask :> Task
