@@ -24,11 +24,13 @@ type SendHelloCommand() =
                 eprintfn $"Error: %A{err}"
                 do! this.RespondAsync ctx "Error: Something goes wrong on our side."
         }
-        |> Async.StartAsTask :> Task
+        |> Async.StartAsTask
+        :> Task
 
-    
+
     [<Command("hoge"); Description("Join the channel")>]
     member public this.hoge(ctx: CommandContext) =
-        printf "コマンドを受信"
+        printfn "コマンドを受信"
+
         async { this.RespondAsync ctx "hogeを受信" |> ignore }
-        |> Async.StartAsTask :> Task
+        |> this.Wrap ctx
