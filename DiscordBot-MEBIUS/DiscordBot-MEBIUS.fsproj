@@ -11,6 +11,7 @@
     <ItemGroup>
         <Compile Include="Monad.fs" />
         <Compile Include="ReadJson.fs" />
+        <Compile Include="Discord\Commands.fs" />
         <Compile Include="Main.fs" />
     </ItemGroup>
 
@@ -18,10 +19,17 @@
       <Content Include=".dockerignore" />
       <Content Include="config.json" />
       <Content Include="Dockerfile" />
+      <Compile Include="Discord\Commands.fs" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="DSharpPlus" Version="4.1.0" />
+      <PackageReference Include="DSharpPlus.CommandsNext" Version="4.1.0" />
       <PackageReference Include="FSharp.Data" Version="4.2.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="bin\Debug\net5.0" />
     </ItemGroup>
 
 </Project>
