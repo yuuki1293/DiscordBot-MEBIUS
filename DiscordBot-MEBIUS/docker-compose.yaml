@@ -7,13 +7,6 @@ networks:
     external: false
 
 services:
-  mebius-bot:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    networks: 
-      - mebius-mysql
-  
   phpmyadmin:
     image: phpmyadmin
     environment:
