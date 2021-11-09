@@ -11,7 +11,6 @@ open Microsoft.Extensions.Logging
 [<EntryPoint>]
 let main _ =
     let jsonConfig = ReadConfig
-    printfn $"%A{jsonConfig}"
     let conf =
         DiscordConfiguration(
             Token = jsonConfig.Token.ToString().Replace("\"", ""),
