@@ -9,25 +9,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Monad.fs" />
-        <Compile Include="ReadJson.fs" />
-        <Compile Include="Discord\Commands.fs" />
+        <Content Include="config.json"/>
+        <Compile Include="Monad.fs"/>
+        <Compile Include="ReadJson.fs"/>
+        <Compile Include="Discord\Commands.fs"/>
+        <Compile Include="DataBase\DBType.fs"/>
+        <Compile Include="DataBase\DBConnect.fs"/>
+        <Compile Include="Main.fs"/>
+        <Content Include="docker-compose.yaml"/>
+        <Content Include=".dockerignore"/>
+        <Content Include="Dockerfile"/>
+        <Content Include="StartBOT.bat"/>
     </ItemGroup>
-
     <ItemGroup>
-      <PackageReference Include="DSharpPlus" Version="4.1.0" />
-      <PackageReference Include="DSharpPlus.CommandsNext" Version="4.1.0" />
-      <PackageReference Include="FSharp.Data" Version="4.2.4" />
+        <PackageReference Include="DSharpPlus" Version="4.1.0"/>
+        <PackageReference Include="DSharpPlus.CommandsNext" Version="4.1.0"/>
+        <PackageReference Include="FSharp.Data" Version="4.2.4"/>
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.3"/>
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Include="DataBase\MySQL.fs" />
-      <Compile Include="Main.fs" />
-      <Content Include="config.json" />
-      <Content Include="docker-compose.yaml" />
-      <Content Include=".dockerignore" />
-      <Content Include="Dockerfile" />
-      <Content Include="StartBOT.bat" />
-    </ItemGroup>
-
 </Project>

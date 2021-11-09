@@ -1,5 +1,6 @@
 module DiscordBot_MEBIUS.Main
 
+open System
 open System.Threading.Tasks
 open DSharpPlus
 open DSharpPlus.CommandsNext
@@ -10,7 +11,7 @@ open Microsoft.Extensions.Logging
 [<EntryPoint>]
 let main _ =
     let jsonConfig = ReadConfig
-
+    printfn $"%A{jsonConfig}"
     let conf =
         DiscordConfiguration(
             Token = jsonConfig.Token.ToString().Replace("\"", ""),

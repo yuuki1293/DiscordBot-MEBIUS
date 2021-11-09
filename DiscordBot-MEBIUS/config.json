@@ -1,4 +1,10 @@
 ﻿{
   "token": "",
-  "database_ip": ""
+  "database": {
+    "ip": "localhost",
+    "port": 3306,
+    "dbname": "mydb",
+    "user_name": "root",
+    "password": ""
+  }
 }
