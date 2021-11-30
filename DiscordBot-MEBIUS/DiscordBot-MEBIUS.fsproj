@@ -2,29 +2,34 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>DiscordBot_MEBIUS</RootNamespace>
         <WarnOn>3390;$(WarnOn)</WarnOn>
         <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="config.json"/>
-        <Compile Include="Monad.fs"/>
-        <Compile Include="ReadJson.fs"/>
-        <Compile Include="Discord\Commands.fs"/>
-        <Compile Include="DataBase\DBType.fs"/>
-        <Compile Include="DataBase\DBConnect.fs"/>
-        <Compile Include="Main.fs"/>
-        <Content Include="docker-compose.yaml"/>
-        <Content Include=".dockerignore"/>
-        <Content Include="Dockerfile"/>
-        <Content Include="StartBOT.bat"/>
+        <Content Include="bin\Debug\net6.0\Ubiety.Dns.Core.dll" />
+        <Content Include="config.json" />
+        <Compile Include="Monad.fs" />
+        <Compile Include="ReadJson.fs" />
+        <Compile Include="DataBase\DBType.fs" />
+        <Compile Include="DataBase\DBConnect.fs" />
+        <Compile Include="Discord\Commands.fs" />
+        <Compile Include="Main.fs" />
+        <Content Include="docker-compose.yaml" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="DSharpPlus" Version="4.1.0"/>
-        <PackageReference Include="DSharpPlus.CommandsNext" Version="4.1.0"/>
-        <PackageReference Include="FSharp.Data" Version="4.2.4"/>
-        <PackageReference Include="System.Data.SqlClient" Version="4.8.3"/>
+        <PackageReference Include="DSharpPlus" Version="4.1.0" />
+        <PackageReference Include="DSharpPlus.CommandsNext" Version="4.1.0" />
+        <PackageReference Include="FSharp.Data" Version="4.2.4" />
+        <PackageReference Include="MySql.Data" Version="8.0.27" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="bin\Debug\net6.0\config.json" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="bin\Release\net6.0\publish" />
     </ItemGroup>
 </Project>

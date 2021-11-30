@@ -1,6 +1,7 @@
 module DiscordBot_MEBIUS.Main
 
 open System
+open System
 open System.Threading.Tasks
 open DSharpPlus
 open DSharpPlus.CommandsNext
@@ -25,7 +26,7 @@ let main _ =
         CommandsNextConfiguration(EnableMentionPrefix = true, StringPrefixes = [ "!mebius"; "!m" ])
 
     let commands = client.UseCommandsNext(commandConf)
-    commands.RegisterCommands<SendHelloCommand>()
+    commands.RegisterCommands<MainCommand>()
 
     client.ConnectAsync()
     |> Async.AwaitTask
@@ -34,5 +35,5 @@ let main _ =
     Task.Delay -1
     |> Async.AwaitTask
     |> Async.RunSynchronously
-
+    
     0

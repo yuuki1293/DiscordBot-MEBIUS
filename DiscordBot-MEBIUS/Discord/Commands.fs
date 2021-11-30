@@ -3,8 +3,10 @@
 open System.Threading.Tasks
 open DSharpPlus.CommandsNext
 open DSharpPlus.CommandsNext.Attributes
+open DiscordBot_MEBIUS.DataBase.DBConnect
+open DiscordBot_MEBIUS.Monad
 
-type SendHelloCommand() =
+type MainCommand() =
     inherit BaseCommandModule()
 
     member private this.RespondAsync (ctx: CommandContext) (msg: string) =
@@ -23,14 +25,22 @@ type SendHelloCommand() =
             | err ->
                 eprintfn $"Error: %A{err}"
                 do! this.RespondAsync ctx "Error: Something goes wrong on our side."
-        }
-        |> Async.StartAsTask
+        }|>Async.StartAsTask
         :> Task
 
-
-    [<Command("hoge"); Description("Join the channel")>]
+    [<Command("ping"); Description("ping pong")>]
     member public this.hoge(ctx: CommandContext) =
         printfn "コマンドを受信"
 
-        async { this.RespondAsync ctx "hogeを受信" |> ignore }
+        async { this.RespondAsync ctx "pong" |> ignore }
         |> this.Wrap ctx
+    
+    [<Command("db_version"); Description("get mysql version")>]
+    member public this.dbVersion(ctx: CommandContext)=
+        printfn "コマンドを受信"
+        async {
+            match GetDBVersion with
+            | Right x -> x
+            | Left x -> $"エラー\n{x}"
+            |> this.RespondAsync ctx |> ignore
+        } |> this.Wrap ctx
