@@ -1,7 +1,5 @@
 module DiscordBot_MEBIUS.Main
 
-open System
-open System
 open System.Threading.Tasks
 open DSharpPlus
 open DSharpPlus.CommandsNext

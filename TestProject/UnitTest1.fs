@@ -20,9 +20,11 @@ let Test1 () =
         
 [<Test>]
 let GetTokenTest ()=
-    match GetDBuuidFromToken 40725 with
+    match GetDBUuidFromToken 432 with
     |Right x->
-        printfn $"{x.Value}"
+        match x with
+        | Some x ->printfn $"{x}"
+        | None -> printfn "None"
         Assert.Pass()
     |Left x ->
         printfn $"{x}"

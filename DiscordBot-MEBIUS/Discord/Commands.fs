@@ -19,7 +19,7 @@ type MainCommand() =
             try
                 do! atask
             with
-            | Failure (msg) ->
+            | Failure msg ->
                 eprintfn $"Error: %s{msg}"
                 do! this.RespondAsync ctx ("Error: " + msg)
             | err ->
@@ -30,14 +30,11 @@ type MainCommand() =
 
     [<Command("ping"); Description("ping pong")>]
     member public this.hoge(ctx: CommandContext) =
-        printfn "コマンドを受信"
-
         async { this.RespondAsync ctx "pong" |> ignore }
         |> this.Wrap ctx
     
-    [<Command("db_version"); Description("get mysql version")>]
+    [<Command("db_version");Aliases("-v"); Description("get mysql version")>]
     member public this.dbVersion(ctx: CommandContext)=
-        printfn "コマンドを受信"
         async {
             match GetDBVersion with
             | Right x -> x
