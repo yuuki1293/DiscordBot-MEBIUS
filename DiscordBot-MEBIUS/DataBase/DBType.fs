@@ -18,15 +18,17 @@ type MEBIUS_data=
         Name:string
         Durability:int
         Level:int
+        Enchant:Enchant
+    }
+type Mcid=
+    {
+        Mcid:string
+        Uuid:string
     }
 type User=
     {
-        Discord_id:string
+        Discord_id:uint64
         Mebius_count:int
-    }
-type DBType=
-    {
-        Enchant:Enchant
+        Mcid:Mcid
         MEBIUS_data:MEBIUS_data
-        User:User
     }
