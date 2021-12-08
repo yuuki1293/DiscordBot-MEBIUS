@@ -16,6 +16,7 @@
         <Compile Include="DataBase\DBType.fs" />
         <Compile Include="DataBase\DBConnect.fs" />
         <Compile Include="Discord\Commands.fs" />
+        <Compile Include="Discord\Authentication.fs" />
         <Compile Include="Main.fs" />
         <Content Include="docker-compose.yaml" />
     </ItemGroup>
@@ -23,6 +24,7 @@
         <PackageReference Include="DSharpPlus" Version="4.1.0" />
         <PackageReference Include="DSharpPlus.CommandsNext" Version="4.1.0" />
         <PackageReference Include="FSharp.Data" Version="4.2.4" />
+        <PackageReference Include="Logary" Version="5.0.1" />
         <PackageReference Include="MySql.Data" Version="8.0.27" />
         <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     </ItemGroup>
@@ -31,5 +33,6 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="bin\Release\net6.0\publish" />
+      <Compile Include="Logger.fs" />
     </ItemGroup>
 </Project>

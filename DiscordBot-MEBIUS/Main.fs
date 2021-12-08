@@ -5,7 +5,9 @@ open DSharpPlus
 open DSharpPlus.CommandsNext
 open DiscordBot_MEBIUS.ReadJson
 open DiscordBot_MEBIUS.Commands
+open Emzi0767.Utilities
 open Microsoft.Extensions.Logging
+open DiscordBot_MEBIUS.Authentication
 
 [<EntryPoint>]
 let main _ =
@@ -25,6 +27,7 @@ let main _ =
 
     let commands = client.UseCommandsNext(commandConf)
     commands.RegisterCommands<MainCommand>()
+    client.add_MessageCreated(AsyncEventHandler(ReceiveTokenEvent));
 
     client.ConnectAsync()
     |> Async.AwaitTask
