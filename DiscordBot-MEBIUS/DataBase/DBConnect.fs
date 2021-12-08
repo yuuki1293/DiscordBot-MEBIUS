@@ -3,6 +3,7 @@
 open DiscordBot_MEBIUS.Monad
 open DiscordBot_MEBIUS.ReadJson
 open MySql.Data.MySqlClient
+open DiscordBot_MEBIUS.DataBase.DBType
 
 let ConnectionString =
     let config = ReadConfig.Database
@@ -31,6 +32,31 @@ let GetDBUuidFromToken (token: int) =
 
         match command.ExecuteScalar() with
         | null -> Right None
-        | x -> Right(Some x)
+        | x -> Right(Some (x|>string))
     with
     | x -> Left x
+
+//TODO: まだできてないよ
+let AddUserData (user: User) =
+    use connection = new MySqlConnection(ConnectionString)
+
+    use userCommand =
+        new MySqlCommand($"INSERT INTO user VALUES ('{user.Discord_id}', {user.Mebius_count})", connection)
+
+    use mcidCommand =
+        new MySqlCommand(
+            $"INSERT INTO mcid VALUES ('{user.Mcid.Mcid})', '{user.Mcid.Uuid}','{user.Discord_id}'",
+            connection
+        )
+
+    try
+        connection.Open()
+
+        (match userCommand.ExecuteScalar() with
+         | null -> Right None
+         | x -> Right(Some x)
+         , match mcidCommand.ExecuteScalar() with
+           | null -> Right None
+           | x -> Right(Some x))
+    with
+    | x -> (Left x, Left x)
