@@ -37,15 +37,15 @@ let GetDBUuidFromToken (token: int) =
     | x -> Left x
 
 //TODO: まだできてないよ
-let AddUserData (user: User) =
+let AddUserData (mcid:Mcid) =
     use connection = new MySqlConnection(ConnectionString)
 
     use userCommand =
-        new MySqlCommand($"INSERT INTO user VALUES ('{user.Discord_id}', {user.Mebius_count})", connection)
+        new MySqlCommand($"INSERT INTO user VALUES ('{mcid.User.Discord_id}', {mcid.User.Mebius_count})", connection)
 
     use mcidCommand =
         new MySqlCommand(
-            $"INSERT INTO mcid VALUES ('{user.Mcid.Mcid})', '{user.Mcid.Uuid}','{user.Discord_id}'",
+            $"INSERT INTO mcid VALUES ('{mcid.Mcid})', '{mcid.Uuid}','{mcid.User.Discord_id}'",
             connection
         )
 

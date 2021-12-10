@@ -1,5 +1,16 @@
 ﻿module DiscordBot_MEBIUS.DataBase.DBType
 
+type User=
+    {
+        Discord_id:uint64
+        Mebius_count:int
+    }
+type Mcid=
+    {
+        Mcid:string
+        Uuid:string
+        User:User
+    }
 type Enchant =
     {
         Durability:int
@@ -19,16 +30,5 @@ type MEBIUS_data=
         Durability:int
         Level:int
         Enchant:Enchant
-    }
-type Mcid=
-    {
-        Mcid:string
-        Uuid:string
-    }
-type User=
-    {
-        Discord_id:uint64
-        Mebius_count:int
-        Mcid:Mcid
-        MEBIUS_data:MEBIUS_data
+        User:User
     }
