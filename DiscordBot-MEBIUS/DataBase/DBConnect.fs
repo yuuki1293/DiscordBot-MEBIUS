@@ -1,16 +1,16 @@
 ﻿module DiscordBot_MEBIUS.DataBase.DBConnect
 
-open DiscordBot_MEBIUS.Monad
+open DiscordBot_MEBIUS.Computation
 open DiscordBot_MEBIUS.ReadJson
 open MySql.Data.MySqlClient
 open DiscordBot_MEBIUS.DataBase.DBType
 
-let ConnectionString =
-    let config = ReadConfig.Database
+let connectionString =
+    let config = readConfig.Database
     $"Server={config.Ip};Database={config.Dbname};Uid={config.UserName};Pwd={config.Password}"
 
-let GetDBVersion =
-    use connection = new MySqlConnection(ConnectionString)
+let getDbVersion =
+    use connection = new MySqlConnection(connectionString)
 
     use command =
         new MySqlCommand("SELECT version()", connection)
@@ -21,8 +21,8 @@ let GetDBVersion =
     with
     | x -> Left x
 
-let GetDBUuidFromToken (token: int) =
-    use connection = new MySqlConnection(ConnectionString)
+let getDBUuidFromToken (token: int) =
+    use connection = new MySqlConnection(connectionString)
 
     use command =
         new MySqlCommand($"SELECT uuid FROM token WHERE token={token}", connection)
@@ -32,31 +32,25 @@ let GetDBUuidFromToken (token: int) =
 
         match command.ExecuteScalar() with
         | null -> Right None
-        | x -> Right(Some (x|>string))
+        | x -> Right(Some(x |> string))
     with
     | x -> Left x
 
 //TODO: まだできてないよ
-let AddUserData (mcid:Mcid) =
-    use connection = new MySqlConnection(ConnectionString)
+let addUserData (mcid: Mcid) =
+    use connection = new MySqlConnection(connectionString)
 
     use userCommand =
-        new MySqlCommand($"INSERT INTO user VALUES ('{mcid.User.Discord_id}', {mcid.User.Mebius_count})", connection)
+        new MySqlCommand($"INSERT INTO user VALUES ('{mcid.User.Discord_id}')", connection)
 
     use mcidCommand =
-        new MySqlCommand(
-            $"INSERT INTO mcid VALUES ('{mcid.Mcid})', '{mcid.Uuid}','{mcid.User.Discord_id}'",
-            connection
-        )
+        new MySqlCommand($"INSERT INTO mcid VALUES ('{mcid.Mcid}', '{mcid.Uuid}','{mcid.User.Discord_id}')", connection)
 
     try
         connection.Open()
 
-        (match userCommand.ExecuteScalar() with
-         | null -> Right None
-         | x -> Right(Some x)
-         , match mcidCommand.ExecuteScalar() with
-           | null -> Right None
-           | x -> Right(Some x))
+        userCommand.ExecuteNonQuery() |> ignore
+        mcidCommand.ExecuteNonQuery() |> ignore
+        Right 0
     with
-    | x -> (Left x, Left x)
+    | x -> Left x

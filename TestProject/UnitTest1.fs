@@ -2,9 +2,7 @@ module TestProject
 
 open NUnit.Framework
 open DiscordBot_MEBIUS.DataBase.DBConnect
-open DiscordBot_MEBIUS.Monad
-open NUnit.Framework
-open NUnit.Framework
+open DiscordBot_MEBIUS.Computation
 
 [<SetUp>]
 let Setup () =
@@ -12,7 +10,7 @@ let Setup () =
 
 [<Test>]
 let Test1 () =
-    match GetDBVersion with
+    match getDbVersion with
     | Right _ -> Assert.Pass()
     | Left x ->
         printfn $"{x}"
@@ -20,7 +18,7 @@ let Test1 () =
         
 [<Test>]
 let GetTokenTest ()=
-    match GetDBUuidFromToken 432 with
+    match getDBUuidFromToken 432 with
     |Right x->
         match x with
         | Some x ->printfn $"{x}"
@@ -29,3 +27,4 @@ let GetTokenTest ()=
     |Left x ->
         printfn $"{x}"
         Assert.Fail()
+        

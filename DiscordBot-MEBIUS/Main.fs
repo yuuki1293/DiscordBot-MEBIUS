@@ -11,7 +11,7 @@ open DiscordBot_MEBIUS.Authentication
 
 [<EntryPoint>]
 let main _ =
-    let jsonConfig = ReadConfig
+    let jsonConfig = readConfig
     let conf =
         DiscordConfiguration(
             Token = jsonConfig.Token.ToString().Replace("\"", ""),
@@ -27,7 +27,7 @@ let main _ =
 
     let commands = client.UseCommandsNext(commandConf)
     commands.RegisterCommands<MainCommand>()
-    client.add_MessageCreated(AsyncEventHandler(ReceiveTokenEvent));
+    client.add_MessageCreated(AsyncEventHandler(receiveTokenEvent));
 
     client.ConnectAsync()
     |> Async.AwaitTask

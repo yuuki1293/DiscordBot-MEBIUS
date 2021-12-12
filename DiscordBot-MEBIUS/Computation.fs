@@ -1,4 +1,4 @@
-﻿module DiscordBot_MEBIUS.Monad
+﻿module DiscordBot_MEBIUS.Computation
 
 
 let (>>=) m f =
