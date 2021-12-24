@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DiscordBot-MEBIUS", "DiscordBot-MEBIUS\DiscordBot-MEBIUS.fsproj", "{C8C4CC09-32F9-4255-AF7D-6487A7C00EFF}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TestProject", "TestProject\TestProject.fsproj", "{C88EE9BA-B03F-4D02-AF2F-4FA1E60C535A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
