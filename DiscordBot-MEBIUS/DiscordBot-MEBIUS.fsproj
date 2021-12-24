@@ -13,6 +13,8 @@
         <Content Include="config.json" />
         <Compile Include="Computation.fs" />
         <Compile Include="ReadJson.fs" />
+        <Compile Include="Mebius\Mebius.fs" />
+        <Compile Include="Mebius\Enchantment.fs" />
         <Compile Include="DataBase\DBType.fs" />
         <Compile Include="DataBase\DBConnect.fs" />
         <Compile Include="Discord\Commands.fs" />
@@ -32,7 +34,5 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="bin\Release\net6.0\publish" />
-      <Compile Include="Mebius\Mebius.fs" />
-      <Compile Include="Mebius\Enchantment.fs" />
     </ItemGroup>
 </Project>
