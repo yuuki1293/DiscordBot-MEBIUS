@@ -46,7 +46,6 @@ let IsUuidDuplicate (uuid:string)(connection:MySqlConnection)=
         printfn $"{x.Message}"
         None
 
-//TODO: まだできてないよ
 let addUserData (mcid: Mcid) =
     use userCommand =
         new MySqlCommand($"INSERT INTO user VALUES ('{mcid.User.Discord_id}')", connection)
