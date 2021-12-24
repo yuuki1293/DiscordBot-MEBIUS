@@ -5,7 +5,7 @@ open FSharp.Data
 
 type ConfigType = JsonProvider<"config.json">
 
-let readConfig =
+let appConf =
     File.ReadAllText("config.json")
     |> ConfigType.Parse
 

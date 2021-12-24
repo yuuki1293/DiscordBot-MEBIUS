@@ -1,3 +1,5 @@
+open Microsoft.Extensions.Logging
+
 module Program =
 
     [<EntryPoint>]

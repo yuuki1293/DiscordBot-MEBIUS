@@ -6,6 +6,8 @@ open DiscordBot_MEBIUS.Computation
 
 [<SetUp>]
 let Setup () =
+    let a = [|1; 2; 3; 4; 5|]
+    printfn $"%A{a.[1]}"
     ()
 
 [<Test>]
@@ -15,16 +17,16 @@ let Test1 () =
     | Left x ->
         printfn $"{x}"
         Assert.Fail()
-        
+
 [<Test>]
-let GetTokenTest ()=
+let GetTokenTest () =
     match getDBUuidFromToken 432 with
-    |Right x->
+    | Right x ->
         match x with
-        | Some x ->printfn $"{x}"
+        | Some x -> printfn $"{x}"
         | None -> printfn "None"
+
         Assert.Pass()
-    |Left x ->
+    | Left x ->
         printfn $"{x}"
         Assert.Fail()
-        

@@ -6,7 +6,7 @@ open MySql.Data.MySqlClient
 open DiscordBot_MEBIUS.DataBase.DBType
 
 let connectionString =
-    let config = readConfig.Database
+    let config = appConf.Database
     $"Server={config.Ip};Database={config.Dbname};Uid={config.UserName};Pwd={config.Password}"
 
 let getDbVersion =
@@ -36,21 +36,43 @@ let getDBUuidFromToken (token: int) =
     with
     | x -> Left x
 
+let IsUuidDuplicate (uuid:string)(connection:MySqlConnection)=
+    use uuidDuplicateCheckCommand =
+        new MySqlCommand($"SELECT * FROM mcid WHERE uuid={uuid}",connection)
+    try
+        match uuidDuplicateCheckCommand.ExecuteScalar() with
+        | x when (isNull x) -> Some false
+        | _ -> Some true
+    with
+    | x ->
+        printfn $"{x.Message}"
+        None
+
 //TODO: まだできてないよ
 let addUserData (mcid: Mcid) =
     use connection = new MySqlConnection(connectionString)
-
+    
     use userCommand =
         new MySqlCommand($"INSERT INTO user VALUES ('{mcid.User.Discord_id}')", connection)
-
+    
+    use userExist =
+        new MySqlCommand($"SElECT * FROM user WHERE discord_id = {mcid.User.Discord_id}",connection)
+    
     use mcidCommand =
         new MySqlCommand($"INSERT INTO mcid VALUES ('{mcid.Mcid}', '{mcid.Uuid}','{mcid.User.Discord_id}')", connection)
-
+    
+    use mcidExist =
+        new MySqlCommand($"SELECT * FROM mcid WHERE mcid = {mcid.Mcid}")
+    
     try
         connection.Open()
-
-        userCommand.ExecuteNonQuery() |> ignore
-        mcidCommand.ExecuteNonQuery() |> ignore
-        Right 0
+        
+        if mcidExist.ExecuteReader().FieldCount > 0 then
+            mcidCommand.ExecuteNonQuery() |> ignore
+            if userExist.ExecuteReader().FieldCount > 0 then
+                userCommand.ExecuteNonQuery() |> ignore
+            Right None
+        else Right (Some "そのmcidはすでに登録されています")
     with
+    | :? System.InvalidOperationException as x -> Left x.InnerException
     | x -> Left x

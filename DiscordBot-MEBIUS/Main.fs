@@ -11,7 +11,7 @@ open DiscordBot_MEBIUS.Authentication
 
 [<EntryPoint>]
 let main _ =
-    let jsonConfig = readConfig
+    let jsonConfig = appConf
     let conf =
         DiscordConfiguration(
             Token = jsonConfig.Token.ToString().Replace("\"", ""),
