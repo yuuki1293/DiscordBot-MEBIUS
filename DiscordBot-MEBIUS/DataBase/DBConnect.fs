@@ -9,9 +9,9 @@ let connectionString =
     let config = appConf.Database
     $"Server={config.Ip};Database={config.Dbname};Uid={config.UserName};Pwd={config.Password}"
 
-let getDbVersion =
-    use connection = new MySqlConnection(connectionString)
+let connection = new MySqlConnection(connectionString)
 
+let getDbVersion =
     use command =
         new MySqlCommand("SELECT version()", connection)
 
@@ -22,8 +22,6 @@ let getDbVersion =
     | x -> Left x
 
 let getDBUuidFromToken (token: int) =
-    use connection = new MySqlConnection(connectionString)
-
     use command =
         new MySqlCommand($"SELECT uuid FROM token WHERE token={token}", connection)
 
@@ -50,8 +48,6 @@ let IsUuidDuplicate (uuid:string)(connection:MySqlConnection)=
 
 //TODO: まだできてないよ
 let addUserData (mcid: Mcid) =
-    use connection = new MySqlConnection(connectionString)
-    
     use userCommand =
         new MySqlCommand($"INSERT INTO user VALUES ('{mcid.User.Discord_id}')", connection)
     
