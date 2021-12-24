@@ -14,10 +14,10 @@ type MainCommand() =
         |> Async.AwaitTask
         |> Async.Ignore
 
-    member private this.Wrap (ctx: CommandContext) (atask: Async<unit>) =
-        async {
+    member private this.Wrap (ctx: CommandContext) (aTask: Async<unit>) =
+        task {
             try
-                do! atask
+                do! aTask
             with
             | Failure msg ->
                 eprintfn $"Error: %s{msg}"
@@ -25,13 +25,8 @@ type MainCommand() =
             | err ->
                 eprintfn $"Error: %A{err}"
                 do! this.RespondAsync ctx "Error: Something goes wrong on our side."
-        }|>Async.StartAsTask
+        }
         :> Task
-
-    [<Command("ping"); Description("ping pong")>]
-    member public this.hoge(ctx: CommandContext) =
-        async { this.RespondAsync ctx "pong" |> ignore }
-        |> this.Wrap ctx
     
     [<Command("db_version");Aliases("-v"); Description("get mysql version")>]
     member public this.dbVersion(ctx: CommandContext)=
