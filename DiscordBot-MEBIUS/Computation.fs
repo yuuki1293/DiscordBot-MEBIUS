@@ -10,8 +10,8 @@ type MaybeBuilder() =
 let maybe = MaybeBuilder()
 
 type Either<'T, 'U> =
-    | Right of 'T
-    | Left of 'U
+    | Left of 'T
+    | Right of 'U
     static member (>>=)(m, f) =
         match m with
         | Right x -> f x
