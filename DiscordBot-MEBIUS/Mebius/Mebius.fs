@@ -10,9 +10,9 @@ type Mebius =
     { id: MebiusId }
     member this.LevelUp() = this.id
 
-let getMebiusIDs (discordUser: DiscordUser) =
+let getMebiusIDs (discordId: uint64) =
     either {
-        let! ids = getDBMebiusIDs discordUser
+        let! ids = getDBMebiusIDs discordId
 
         return
             ids
