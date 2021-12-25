@@ -9,14 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="bin\Debug\net6.0\Ubiety.Dns.Core.dll" />
         <Content Include="config.json" />
         <Compile Include="Computation.fs" />
         <Compile Include="ReadJson.fs" />
+        <Compile Include="MojangConnect.fs" />
+        <Compile Include="DataBase\DBConnect.fs" />
         <Compile Include="Mebius\Enchantment.fs" />
         <Compile Include="Mebius\Mebius.fs" />
-        <Compile Include="DataBase\DBType.fs" />
-        <Compile Include="DataBase\DBConnect.fs" />
         <Compile Include="Discord\Commands.fs" />
         <Compile Include="Discord\Authentication.fs" />
         <Compile Include="Main.fs" />

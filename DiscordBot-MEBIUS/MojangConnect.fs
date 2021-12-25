@@ -11,7 +11,7 @@ type UserProfilesUuidNamesType = JsonProvider<"{\"name\":\"mcid\",\"changedToAt\
 let readMcidList list =
     UserProfilesUuidNamesType.ParseList list
 
-let getMcidFromUuid (uuid: uint64) =
+let getMcidFromUuid (uuid: string) =
     task {
         use httpClient = new HttpClient()
         let! response = httpClient.GetAsync $"https://api.mojang.com/user/profiles/{uuid}/names"

@@ -1,20 +1,19 @@
 ﻿module DiscordBot_MEBIUS.Authentication
 
 open System
-open System.IO
-open System.Net
-open System.Net.Http
 open System.Threading.Tasks
 open DSharpPlus
 open DSharpPlus.Entities
 open DiscordBot_MEBIUS.DataBase.DBConnect
-open DiscordBot_MEBIUS.DataBase.DBType
 open DiscordBot_MEBIUS.Computation
 open DiscordBot_MEBIUS.ReadJson
-open System.Linq
 
-let isMention (e: EventArgs.MessageCreateEventArgs) = e.Message.Content.Contains '@'
+/// <summary>discordのメッセージにメンションが含まれているか調べる</summary>
+/// <param name="e">the input DiscordMessage</param>
+/// <returns>true or false</returns>
+let isMention (e: DiscordMessage) = e.Content.Contains '@'
 
+/// <summary>configで設定したdiscord idのメンションを含んだメッセージを送る</summary>
 let mentionOwnerAsync (msg: string)(client: DiscordClient)(e:EventArgs.MessageCreateEventArgs) =
     e.Channel.SendMessageAsync(
         DiscordMessageBuilder()
@@ -29,7 +28,7 @@ let mentionOwnerAsync (msg: string)(client: DiscordClient)(e:EventArgs.MessageCr
             .WithAllowedMention(UserMention(appConf.OwnerId |> uint64))
     )
 
-let messageDeleteAsyncTime (time: int) (sent: Task<Entities.DiscordMessage>) =
+let messageDeleteAsyncTime (time: int) (sent: Task<DiscordMessage>) =
     task {
         do! Task.Delay time
         do! sent.Result.DeleteAsync()
@@ -40,66 +39,29 @@ let receiveTokenEvent (client: DiscordClient) (e: EventArgs.MessageCreateEventAr
         if e.Author.IsBot then
             0 |> ignore
         else
-            if e.Channel.Name = ReadJson.appConf.Channel then
+            if e.Channel.Name = appConf.Channel then
                 match e.Message.Content with
                 | code when String.forall Char.IsDigit code ->
                     printfn $"{code}は10進数値だよ"
 
                     match getDBUuidFromToken (int code) with
-                    | Right (Some (uuid)) ->
-                        use httpClient = new HttpClient()
-                        let! response = httpClient.GetAsync $"https://api.mojang.com/user/profiles/{uuid}/names"
-
-                        match response.StatusCode with
-                        | HttpStatusCode.NoContent ->
-                            do!
-                                e.Message.RespondAsync "minecraftアカウントが存在しません。"
-                                |> messageDeleteAsyncTime 3000
-                        | HttpStatusCode.NotFound ->
-                            do!
-                                mentionOwnerAsync
-                                    "Mojang APIのサーバーが落ちている可能性が高いです。しばらく待ってからやり直してください。\nおのれもやん" client e
-                                |> messageDeleteAsyncTime 3000
-                        | HttpStatusCode.OK ->
-                            use reader =
-                                new StreamReader(response.Content.ReadAsStream())
-
-                            let mcid = reader.ReadLine() |> readMcidList
-
-                            match
-                                addUserData
-                                    (
-                                        { Mcid = mcid.Last().Name
-                                          Uuid = uuid
-                                          User =
-                                              { Discord_id = e.Author.Id
-                                                Mebius_count = 0 } }
-                                    )
-                                with
-                            | Right (Some x) ->
-                                do!
-                                    e.Channel.SendMessageAsync x
-                                    |> messageDeleteAsyncTime 3000
-                            | Right None -> ()
-                            | Left x ->
-                                do!
-                                    mentionOwnerAsync "エラーが発生しました" client e
-                                    |> messageDeleteAsyncTime 3000
-
-                        | _ ->
-                            do!
-                                mentionOwnerAsync "予期しないエラーが発生しました" client e
-                                |> messageDeleteAsyncTime 3000
-                    | Right (None) ->
+                    | Right (Some uuid) ->
+                        match addUserData uuid e.Author.Id with
+                        | Right (Some x) -> do! e.Channel.SendMessageAsync x |> messageDeleteAsyncTime 3000
+                        | Right None ->
+                            //TODO: 認証ロールをつける
+                            ()
+                        | Left x-> do! mentionOwnerAsync x.Message client e |> messageDeleteAsyncTime 3000 
+                    | Right None ->
                         do!
                             e.Channel.SendMessageAsync "codeが間違っています"
                             |> messageDeleteAsyncTime 3000
-                    | Left (x) ->
+                    | Left _ ->
                         do!
                             mentionOwnerAsync "エラーが発生しました" client e
                             |> messageDeleteAsyncTime 3000
 
-                | _ when isMention e ->
+                | _ when isMention e.Message ->
                     printfn $"{e.Author}はメンションをしたよ"
                     do! e.Guild.BanMemberAsync e.Author.Id
                 | _ ->
