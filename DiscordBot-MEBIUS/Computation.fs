@@ -9,11 +9,11 @@ type MaybeBuilder() =
 
 let maybe = MaybeBuilder()
 
-type EitherBuilder() =
+type ResultBuilder() =
     member _.Return(x) = Ok x
     member _.Bind(m, f) =
         match m with
         | Ok x -> f x
         | Error x -> Error x
-
-let either = EitherBuilder()
+    
+let result = ResultBuilder()

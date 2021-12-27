@@ -11,7 +11,7 @@ type Mebius =
         id
 
 let getMebiusIDs (discordId: uint64) =
-    either {
+    result {
         let! ids = getDBMebiusIDs discordId
 
         return
