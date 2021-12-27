@@ -7,8 +7,9 @@ open DiscordBot_MEBIUS.Computation
 type MebiusId = MebiusId of id: int
 
 type Mebius =
-    { id: MebiusId }
-    member this.LevelUp() = this.id
+    {id:MebiusId}
+    member this.LevelUp() =
+        id
 
 let getMebiusIDs (discordId: uint64) =
     either {
@@ -19,3 +20,6 @@ let getMebiusIDs (discordId: uint64) =
             |> Seq.map (fun x -> { id = MebiusId x })
             |> Seq.toList
     }
+
+let mebiusLevelUp(mebius :Mebius)=
+    getMebiusIDs

@@ -51,7 +51,7 @@ let receiveTokenEvent (client: DiscordClient) (e: EventArgs.MessageCreateEventAr
                         | Right None ->
                             //TODO: 認証ロールをつける
                             ()
-                        | Left x-> do! mentionOwnerAsync x.Message client e |> messageDeleteAsyncTime 3000 
+                        | Left x-> do! mentionOwnerAsync x client e |> messageDeleteAsyncTime 3000 
                     | Right None ->
                         do!
                             e.Channel.SendMessageAsync "codeが間違っています"

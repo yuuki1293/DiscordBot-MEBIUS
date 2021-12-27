@@ -5,6 +5,7 @@ open DiscordBot_MEBIUS.Computation
 open DiscordBot_MEBIUS.ReadJson
 open MySql.Data.MySqlClient
 open MojangConnect
+open FSharp.Core.CompilerServices
 
 let connectionString =
     let config = appConf.Database
@@ -49,33 +50,37 @@ let IsUuidDuplicate (uuid: string) (connection: MySqlConnection) =
         None
 
 let addUserData (uuid: string)(discordId:uint64) =
-    let mcid = getMcidFromUuid uuid
-    use userCommand =
-        new MySqlCommand($"INSERT INTO user VALUES ('{discordId}')", connection)
+    let mcidResult = (getMcidFromUuid uuid).Result
+    match mcidResult with
+    | Right mcid ->
+        use userCommand =
+            new MySqlCommand($"INSERT INTO user VALUES ('{discordId}')", connection)
 
-    use userExist =
-        new MySqlCommand($"SElECT * FROM user WHERE discord_id = {discordId}", connection)
+        use userExist =
+            new MySqlCommand($"SElECT * FROM user WHERE discord_id = {discordId}", connection)
 
-    use mcidCommand =
-        new MySqlCommand($"INSERT INTO mcid VALUES ('{mcid}', '{uuid}','{discordId}')", connection)
+        use mcidCommand =
+            new MySqlCommand($"INSERT INTO mcid VALUES ('{mcid}', '{uuid}','{discordId}')", connection)
 
-    use mcidExist =
-        new MySqlCommand($"SELECT * FROM mcid WHERE mcid = {mcid}")
+        use mcidExist =
+            new MySqlCommand($"SELECT * FROM mcid WHERE mcid = {mcid}")
 
-    try
-        connection.Open()
+        try
+            connection.Open()
 
-        if mcidExist.ExecuteReader().FieldCount > 0 then
-            mcidCommand.ExecuteNonQuery() |> ignore
+            if mcidExist.ExecuteReader().FieldCount > 0 then
+                mcidCommand.ExecuteNonQuery() |> ignore
 
-            if userExist.ExecuteReader().FieldCount > 0 then
-                userCommand.ExecuteNonQuery() |> ignore
+                if userExist.ExecuteReader().FieldCount > 0 then
+                    userCommand.ExecuteNonQuery() |> ignore
 
-            Right None
-        else
-            Right(Some "そのmcidはすでに登録されています")
-    with
-    | x -> Left x
+                Right None
+            else
+                Right(Some "そのmcidはすでに登録されています")
+        with
+        | x -> Left x.Message
+    | Left (_, msg)->Left msg
+        
 
 let getDBMebiusIDs (discordId: uint64) =
     use getIDsCommand =
@@ -83,11 +88,14 @@ let getDBMebiusIDs (discordId: uint64) =
 
     try
         use reader = getIDsCommand.ExecuteReader()
-
-        seq {
-            while reader.Read() do
-                yield reader.GetInt32(0)
-        }
+        
+        let mutable col = ListCollector<int>()
+        
+        while reader.Read() do
+            col.Add(reader.GetInt32 0)
+        
+        col.Close()
         |> Right
     with
     | x -> Left x
+
