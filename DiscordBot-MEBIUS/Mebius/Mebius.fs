@@ -1,6 +1,5 @@
 ﻿module DiscordBot_MEBIUS.Mebius.Mebius
 
-open DSharpPlus.Entities
 open DiscordBot_MEBIUS.DataBase.DBConnect
 open DiscordBot_MEBIUS.Computation
 

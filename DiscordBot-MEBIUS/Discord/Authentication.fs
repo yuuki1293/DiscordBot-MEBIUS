@@ -45,18 +45,18 @@ let receiveTokenEvent (client: DiscordClient) (e: EventArgs.MessageCreateEventAr
                     printfn $"{code}は10進数値だよ"
 
                     match getDBUuidFromToken (int code) with
-                    | Right (Some uuid) ->
+                    | Ok (Some uuid) ->
                         match addUserData uuid e.Author.Id with
-                        | Right (Some x) -> do! e.Channel.SendMessageAsync x |> messageDeleteAsyncTime 3000
-                        | Right None ->
+                        | Ok (Some x) -> do! e.Channel.SendMessageAsync x |> messageDeleteAsyncTime 3000
+                        | Ok None ->
                             //TODO: 認証ロールをつける
                             ()
-                        | Left x-> do! mentionOwnerAsync x client e |> messageDeleteAsyncTime 3000 
-                    | Right None ->
+                        | Error x-> do! mentionOwnerAsync x client e |> messageDeleteAsyncTime 3000 
+                    | Ok None ->
                         do!
                             e.Channel.SendMessageAsync "codeが間違っています"
                             |> messageDeleteAsyncTime 3000
-                    | Left _ ->
+                    | Error _ ->
                         do!
                             mentionOwnerAsync "エラーが発生しました" client e
                             |> messageDeleteAsyncTime 3000

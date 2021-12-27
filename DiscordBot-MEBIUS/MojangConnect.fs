@@ -20,10 +20,10 @@ let getMcidFromUuid (uuid: string) =
         | HttpStatusCode.OK ->
             let! content = response.Content.ReadAsStringAsync()
             let mcidList = readMcidList content
-            return Right(mcidList.Last().Name)
-        | HttpStatusCode.NoContent -> return Left(HttpStatusCode.NoContent, "存在しないアカウント")
-        | HttpStatusCode.NotFound -> return Left(HttpStatusCode.NotFound, "api.mojang.comに接続できません")
-        | x when int x >= 400 && int x < 500 -> return Left(x, "Mojang APIとの通信中に何らかのエラーが発生しました")
-        | x when int x >= 500 -> return Left(x, "Mojang APIのサーバーが正常に作動していません")
-        | x -> return Left(x, "予期しないリクエスト")
+            return Ok(mcidList.Last().Name)
+        | HttpStatusCode.NoContent -> return Error(HttpStatusCode.NoContent, "存在しないアカウント")
+        | HttpStatusCode.NotFound -> return Error(HttpStatusCode.NotFound, "api.mojang.comに接続できません")
+        | x when int x >= 400 && int x < 500 -> return Error(x, "Mojang APIとの通信中に何らかのエラーが発生しました")
+        | x when int x >= 500 -> return Error(x, "Mojang APIのサーバーが正常に作動していません")
+        | x -> return Error(x, "予期しないリクエスト")
     }

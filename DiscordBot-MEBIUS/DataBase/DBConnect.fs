@@ -1,7 +1,6 @@
 ﻿module DiscordBot_MEBIUS.DataBase.DBConnect
 
 open DiscordBot_MEBIUS
-open DiscordBot_MEBIUS.Computation
 open DiscordBot_MEBIUS.ReadJson
 open MySql.Data.MySqlClient
 open MojangConnect
@@ -19,9 +18,9 @@ let getDbVersion =
 
     try
         connection.Open()
-        command.ExecuteScalar() |> string |> Right
+        command.ExecuteScalar() |> string |> Ok
     with
-    | x -> Left x
+    | x -> Error x
 
 let getDBUuidFromToken (token: int) =
     use command =
@@ -31,10 +30,10 @@ let getDBUuidFromToken (token: int) =
         connection.Open()
 
         match command.ExecuteScalar() with
-        | null -> Right None
-        | x -> Right(Some(x |> string))
+        | null -> Ok None
+        | x -> Ok(Some(x |> string))
     with
-    | x -> Left x
+    | x -> Error x
 
 let IsUuidDuplicate (uuid: string) (connection: MySqlConnection) =
     use uuidDuplicateCheckCommand =
@@ -52,7 +51,7 @@ let IsUuidDuplicate (uuid: string) (connection: MySqlConnection) =
 let addUserData (uuid: string)(discordId:uint64) =
     let mcidResult = (getMcidFromUuid uuid).Result
     match mcidResult with
-    | Right mcid ->
+    | Ok mcid ->
         use userCommand =
             new MySqlCommand($"INSERT INTO user VALUES ('{discordId}')", connection)
 
@@ -74,12 +73,12 @@ let addUserData (uuid: string)(discordId:uint64) =
                 if userExist.ExecuteReader().FieldCount > 0 then
                     userCommand.ExecuteNonQuery() |> ignore
 
-                Right None
+                Ok None
             else
-                Right(Some "そのmcidはすでに登録されています")
+                Ok(Some "そのmcidはすでに登録されています")
         with
-        | x -> Left x.Message
-    | Left (_, msg)->Left msg
+        | x -> Error x.Message
+    | Error (_, msg)->Error msg
         
 
 let getDBMebiusIDs (discordId: uint64) =
@@ -95,7 +94,6 @@ let getDBMebiusIDs (discordId: uint64) =
             col.Add(reader.GetInt32 0)
         
         col.Close()
-        |> Right
+        |> Ok
     with
-    | x -> Left x
-
+    | x -> Error x

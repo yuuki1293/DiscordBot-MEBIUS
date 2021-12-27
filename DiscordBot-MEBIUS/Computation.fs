@@ -9,18 +9,11 @@ type MaybeBuilder() =
 
 let maybe = MaybeBuilder()
 
-type Either<'T, 'U> =
-    | Left of 'T
-    | Right of 'U
-    static member (>>=)(m, f) =
-        match m with
-        | Right x -> f x
-        | Left x -> Left x
-
-    static member ret x = Right x
-
 type EitherBuilder() =
-    member _.Return(x) = Right x
-    member _.Bind(m:Either<'T, 'U>, f) = m >>= f
+    member _.Return(x) = Ok x
+    member _.Bind(m, f) =
+        match m with
+        | Ok x -> f x
+        | Error x -> Error x
 
 let either = EitherBuilder()

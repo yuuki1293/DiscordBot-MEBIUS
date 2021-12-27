@@ -32,7 +32,7 @@ type MainCommand() =
     member public this.dbVersion(ctx: CommandContext)=
         async {
             match getDbVersion with
-            | Right x -> x
-            | Left x -> $"エラー\n{x}"
+            | Ok x -> x
+            | Error x -> $"エラー\n{x}"
             |> this.RespondAsync ctx |> ignore
         } |> this.Wrap ctx
