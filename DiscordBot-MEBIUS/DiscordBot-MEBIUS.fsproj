@@ -13,8 +13,8 @@
         <Compile Include="Computation.fs" />
         <Compile Include="ReadJson.fs" />
         <Compile Include="MojangConnect.fs" />
-        <Compile Include="DataBase\DBConnect.fs" />
         <Compile Include="Mebius\Enchantment.fs" />
+        <Compile Include="DataBase\DBConnect.fs" />
         <Compile Include="Mebius\Mebius.fs" />
         <Compile Include="Discord\Commands.fs" />
         <Compile Include="Discord\Authentication.fs" />
