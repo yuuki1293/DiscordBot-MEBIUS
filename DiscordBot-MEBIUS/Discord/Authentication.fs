@@ -9,7 +9,7 @@ open DiscordBot_MEBIUS.ReadJson
 
 /// <summary>discordのメッセージにメンションが含まれているか調べる</summary>
 /// <param name="e">the input DiscordMessage</param>
-/// <returns>true or false</returns>
+/// <returns>if contain mention, true</returns>
 let isMention (e: DiscordMessage) = e.Content.Contains '@'
 
 /// <summary>configで設定したdiscord idのメンションを含んだメッセージを送る</summary>

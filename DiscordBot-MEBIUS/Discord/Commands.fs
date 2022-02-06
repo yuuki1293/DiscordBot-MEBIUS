@@ -37,8 +37,8 @@ type MainCommand() =
                 |> this.RespondAsync ctx
         } |> this.Wrap ctx
         
-    [<Command("");Aliases("-m")>]
+    [<Command("new")>]
     member public this.newMebius(ctx: CommandContext) =
         async {
-            
+            //TODO: 新しいメビウスをインスタンス化する(引数をseedに)
         } |> this.Wrap ctx
