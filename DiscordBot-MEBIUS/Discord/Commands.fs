@@ -4,6 +4,7 @@ open System.Threading.Tasks
 open DSharpPlus.CommandsNext
 open DSharpPlus.CommandsNext.Attributes
 open DiscordBot_MEBIUS.DataBase.DBConnect
+open DiscordBot_MEBIUS.Mebius
 
 type MainCommand() =
     inherit BaseCommandModule()
@@ -35,10 +36,4 @@ type MainCommand() =
                 | Ok x -> x
                 | Error x -> $"エラー\n{x}"
                 |> this.RespondAsync ctx
-        } |> this.Wrap ctx
-        
-    [<Command("new")>]
-    member public this.newMebius(ctx: CommandContext) =
-        async {
-            //TODO: 新しいメビウスをインスタンス化する(引数をseedに)
         } |> this.Wrap ctx

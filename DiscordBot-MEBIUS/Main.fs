@@ -9,6 +9,10 @@ open Emzi0767.Utilities
 open Microsoft.Extensions.Logging
 open DiscordBot_MEBIUS.Authentication
 
+let initializeEvent (client:DiscordClient) =
+    client.add_MessageCreated(AsyncEventHandler receiveTokenEvent)
+    client.add_MessageCreated(AsyncEventHandler Mebius.messageCreatedEvent)
+
 [<EntryPoint>]
 let main _ =
     let jsonConfig = appConf
@@ -27,7 +31,7 @@ let main _ =
 
     let commands = client.UseCommandsNext(commandConf)
     commands.RegisterCommands<MainCommand>()
-    client.add_MessageCreated(AsyncEventHandler(receiveTokenEvent));
+    initializeEvent client
 
     client.ConnectAsync()
     |> Async.AwaitTask

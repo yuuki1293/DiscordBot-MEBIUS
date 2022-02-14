@@ -1,6 +1,9 @@
-﻿module DiscordBot_MEBIUS.Mebius.Mebius
+﻿module DiscordBot_MEBIUS.Mebius
 
 open System
+open System.Threading.Tasks
+open DSharpPlus
+open DSharpPlus.EventArgs
 
 type MebiusEnchantment(unlockLevel: int, maxLevel: int, displayName: string, dbName: string) =
     member val unlockLevel = unlockLevel with get
@@ -82,3 +85,11 @@ let levelUp (mebius:Mebius)=
         let after = Unbreakable(1)::mebius.enchants
         {mebius with level = mebius.level+1; enchants = after}
     else mebius
+    
+let messageCreatedEvent(client:DiscordClient)(args:MessageCreateEventArgs) =
+    task{
+        let bytes = System.Text.Encoding.UTF32.GetBytes name
+        let seed = bytes |> Seq.sum
+        let mebius = Mebius.Mebius.New (int seed)
+        
+    }:>Task
