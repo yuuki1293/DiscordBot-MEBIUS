@@ -88,7 +88,7 @@ type Mebius =
       level: int
       enchants: MebiusEnchantments list
       rand: Random}
-    static member New id = {id=id;level=1;enchants=[Durability 3];rand=Random(id)}
+    static member New id = {id=id;level=1;enchants=[Durability 3;Mending 1];rand=Random(id)}
     member this.isMaxLevel() = this.level >= 30 
 
 let strToSeed (str:string) =
