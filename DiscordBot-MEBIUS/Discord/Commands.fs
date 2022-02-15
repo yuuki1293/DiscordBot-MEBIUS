@@ -4,7 +4,7 @@ open System.Threading.Tasks
 open DSharpPlus.CommandsNext
 open DSharpPlus.CommandsNext.Attributes
 open DiscordBot_MEBIUS.DataBase.DBConnect
-open DiscordBot_MEBIUS.Computation
+open DiscordBot_MEBIUS.Mebius
 
 type MainCommand() =
     inherit BaseCommandModule()
@@ -31,8 +31,9 @@ type MainCommand() =
     [<Command("db_version");Aliases("-v"); Description("get mysql version")>]
     member public this.dbVersion(ctx: CommandContext)=
         async {
-            match getDbVersion with
-            | Ok x -> x
-            | Error x -> $"エラー\n{x}"
-            |> this.RespondAsync ctx |> ignore
+            do!
+                match getDbVersion with
+                | Ok x -> x
+                | Error x -> $"エラー\n{x}"
+                |> this.RespondAsync ctx
         } |> this.Wrap ctx

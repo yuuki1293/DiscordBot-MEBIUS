@@ -4,12 +4,14 @@ open DiscordBot_MEBIUS
 open DiscordBot_MEBIUS.ReadJson
 open MySql.Data.MySqlClient
 open MojangConnect
-open FSharp.Core.CompilerServices
 
+/// 接続文字列
 let connectionString =
     let config = appConf.Database
     $"Server={config.Ip};Database={config.Dbname};Uid={config.UserName};Pwd={config.Password}"
 
+///<summary>DBへのMySqlConnection</summary>
+///<return>MySqlConnection</return>
 let connection = new MySqlConnection(connectionString)
 
 let getDbVersion =
@@ -79,21 +81,3 @@ let addUserData (uuid: string)(discordId:uint64) =
         with
         | x -> Error x.Message
     | Error (_, msg)->Error msg
-        
-
-let getDBMebiusIDs (discordId: uint64) =
-    use getIDsCommand =
-        new MySqlCommand($"SELECT mebius_id FROM MEBIUS_data WHERE user_discord_id = {discordId}")
-
-    try
-        use reader = getIDsCommand.ExecuteReader()
-        
-        let mutable col = ListCollector<int>()
-        
-        while reader.Read() do
-            col.Add(reader.GetInt32 0)
-        
-        col.Close()
-        |> Ok
-    with
-    | x -> Error x

@@ -5,16 +5,15 @@ open System.Threading.Tasks
 open DSharpPlus
 open DSharpPlus.Entities
 open DiscordBot_MEBIUS.DataBase.DBConnect
-open DiscordBot_MEBIUS.Computation
 open DiscordBot_MEBIUS.ReadJson
 
 /// <summary>discordのメッセージにメンションが含まれているか調べる</summary>
 /// <param name="e">the input DiscordMessage</param>
-/// <returns>true or false</returns>
+/// <returns>if contain mention, true</returns>
 let isMention (e: DiscordMessage) = e.Content.Contains '@'
 
 /// <summary>configで設定したdiscord idのメンションを含んだメッセージを送る</summary>
-let mentionOwnerAsync (msg: string)(client: DiscordClient)(e:EventArgs.MessageCreateEventArgs) =
+let mentionOwnerAsync (msg: string) (client: DiscordClient) (e: EventArgs.MessageCreateEventArgs) =
     e.Channel.SendMessageAsync(
         DiscordMessageBuilder()
             .WithContent(
@@ -36,10 +35,13 @@ let messageDeleteAsyncTime (time: int) (sent: Task<DiscordMessage>) =
 
 let receiveTokenEvent (client: DiscordClient) (e: EventArgs.MessageCreateEventArgs) =
     task {
-        if e.Author.IsBot then
-            0 |> ignore
+        if
+            e.Author.IsBot
+            || not (e.Channel.Name = appConf.AuthChannel)
+        then
+            ()
         else
-            if e.Channel.Name = appConf.Channel then
+            if e.Channel.Name = appConf.AuthChannel then
                 match e.Message.Content with
                 | code when String.forall Char.IsDigit code ->
                     printfn $"{code}は10進数値だよ"
@@ -47,11 +49,17 @@ let receiveTokenEvent (client: DiscordClient) (e: EventArgs.MessageCreateEventAr
                     match getDBUuidFromToken (int code) with
                     | Ok (Some uuid) ->
                         match addUserData uuid e.Author.Id with
-                        | Ok (Some x) -> do! e.Channel.SendMessageAsync x |> messageDeleteAsyncTime 3000
+                        | Ok (Some x) ->
+                            do!
+                                e.Channel.SendMessageAsync x
+                                |> messageDeleteAsyncTime 3000
                         | Ok None ->
                             //TODO: 認証ロールをつける
                             ()
-                        | Error x-> do! mentionOwnerAsync x client e |> messageDeleteAsyncTime 3000 
+                        | Error x ->
+                            do!
+                                mentionOwnerAsync x client e
+                                |> messageDeleteAsyncTime 3000
                     | Ok None ->
                         do!
                             e.Channel.SendMessageAsync "codeが間違っています"

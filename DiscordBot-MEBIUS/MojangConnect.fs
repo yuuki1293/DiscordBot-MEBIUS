@@ -4,7 +4,6 @@ open System.Net
 open System.Net.Http
 open FSharp.Data
 open System.Linq
-open DiscordBot_MEBIUS.Computation
 
 type UserProfilesUuidNamesType = JsonProvider<"{\"name\":\"mcid\",\"changedToAt\":\"0\"}">
 
