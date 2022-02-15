@@ -37,11 +37,11 @@ let receiveTokenEvent (client: DiscordClient) (e: EventArgs.MessageCreateEventAr
     task {
         if
             e.Author.IsBot
-            || not (e.Channel.Name = appConf.Channel)
+            || not (e.Channel.Name = appConf.AuthChannel)
         then
             ()
         else
-            if e.Channel.Name = appConf.Channel then
+            if e.Channel.Name = appConf.AuthChannel then
                 match e.Message.Content with
                 | code when String.forall Char.IsDigit code ->
                     printfn $"{code}は10進数値だよ"

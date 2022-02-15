@@ -1,6 +1,7 @@
 ﻿{
   "token": "",
-  "channel": "code",
+  "auth_channel": "code",
+  "gacha_channel": "bot使用場所",
   "database": {
     "ip": "localhost",
     "port": 3306,

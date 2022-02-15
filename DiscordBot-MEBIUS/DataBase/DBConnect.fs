@@ -4,8 +4,6 @@ open DiscordBot_MEBIUS
 open DiscordBot_MEBIUS.ReadJson
 open MySql.Data.MySqlClient
 open MojangConnect
-open FSharp.Core.CompilerServices
-open DiscordBot_MEBIUS.Mebius.Enchantment
 
 /// 接続文字列
 let connectionString =
